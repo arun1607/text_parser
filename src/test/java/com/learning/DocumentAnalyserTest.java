@@ -28,6 +28,6 @@ public class DocumentAnalyserTest {
         questions.add("Which are the three species of zebras?");
         questions.add("Which subgenus do the plains zebra and the mountain zebra belong to?");
         List<String> answerInCorrectOrder = documentAnalyser.getAnswerInCorrectOrder(questions, answers);
-        Assert.assertTrue(answerInCorrectOrder.get(0).contains("Grévy's zebra and the mountain zebra"));
+        Assert.assertTrue(answerInCorrectOrder.get(0).contains("Grévy's zebra and the mountain zebra".toLowerCase()));
     }
 }
