@@ -6,6 +6,9 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+/**
+ * Class which performs analysis of given input and provides matching sentences according to input strings.
+ */
 public class DocumentAnalyser {
     private final TextParser textParser;
     private final Tokenizer wordTokenizer;
@@ -19,10 +22,18 @@ public class DocumentAnalyser {
         textParser = new TextParser(lineTokenizer, filters);
     }
 
+    /**
+     * Initialises the DocumentAnalyser.
+     * @throws ParsingException
+     */
     public void init() throws ParsingException {
         textParser.init();
     }
 
+    /**
+     * Reads content of given input string and parses it according to constituting words.
+     * @param input The string to parse.
+     */
     public void read(String input) {
         if (StringUtils.isBlank(input)) {
             throw new IllegalArgumentException("Input cannot be null or empty");
@@ -30,6 +41,13 @@ public class DocumentAnalyser {
         textParser.parse(input, wordTokenizer);
     }
 
+    /**
+     * Returns answers in order of questions.
+     *
+     * @param questions List containing questions.
+     * @param answerStr String containing answers in single line.
+     * @return List containing answers.
+     */
     public List<String> getAnswerInCorrectOrder(final List<String> questions, final String answerStr) {
         if (StringUtils.isBlank(answerStr)) {
             throw new IllegalArgumentException("Answer string cannot be null or empty");
