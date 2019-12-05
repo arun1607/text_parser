@@ -1,40 +1,34 @@
 package com.learning;
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.util.Arrays;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public final class StopWordFilter {
+public final class StopWordFilter implements WordFilter {
     private Set<String> stopWords = new HashSet<>();
-    private final String stopWordLocation;
-
-    public StopWordFilter(String stopWordLocation) {
-        if (StringUtils.isBlank(stopWordLocation)) {
-            throw new IllegalArgumentException("Stop location cannot be null or empty");
-        }
-        this.stopWordLocation = stopWordLocation;
-    }
 
     public void init() throws ParsingException {
-        File stopWordFile = new File(stopWordLocation);
-        if (!stopWordFile.exists()) {
-            throw new ParsingException("Stop word file not found");
-        }
         try {
-            stopWords = Files.readAllLines(stopWordFile.toPath()).stream().map(String::toLowerCase).collect(Collectors.toSet());
-        } catch (IOException e) {
+            String stopWordFileName = "stop_words.txt";
+            Path path = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource(stopWordFileName)).toURI());
+            stopWords = Files.readAllLines(path).stream().map(String::toLowerCase).collect(Collectors.toSet());
+        } catch (IOException | URISyntaxException e) {
             throw new ParsingException("Error occurred in reading stop word file.");
         }
     }
 
-    public List<String> filterStopWords(String line, String wordSeparator) {
-        return Arrays.stream(line.split(wordSeparator)).filter(str -> !stopWords.contains(str.toLowerCase())).collect(Collectors.toList());
+    @Override
+    public List<String> filter(List<String> words) {
+        if (words == null) {
+            throw new NullPointerException("word list cannot be null");
+        }
+        return words.stream().filter(str -> !stopWords.contains(str.toLowerCase())).collect(Collectors.toList());
     }
 }

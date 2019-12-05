@@ -6,13 +6,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class LineTokenizer implements Tokenizer {
+public final class WordTokenizer implements Tokenizer {
 
     public List<String> tokenize(final String input, final String separator) {
         if (StringUtils.isNotBlank(separator)) {
             return Arrays.stream(input.split(separator)).filter(StringUtils::isNotBlank).map(String::trim).map(String::toLowerCase).collect(Collectors.toList());
         } else {
-            final String separatorToUse = "[?.]";
+            final String separatorToUse = "[;():\\s]";
             return Arrays.stream(input.split(separatorToUse)).filter(StringUtils::isNotBlank).map(String::trim).map(String::toLowerCase).collect(Collectors.toList());
         }
     }
